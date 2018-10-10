@@ -115,6 +115,7 @@ reportApp ServerContext{..} req respond =
                     --     storeCustomReport scLogsHolder payload allLogs response
 
                     -- pure $ Just response
+                    putStrLn "nothing"
 
                 (Nothing, r@RCustomReport{}) -> do
                     let e = "Ignoring custom report because zendesk " <>
