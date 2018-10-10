@@ -85,7 +85,6 @@ param key ps = case lookup key ps of
 
 reportApp :: ServerContext -> Application
 reportApp ServerContext{..} req respond =
-    let pt (t :: Text) = putStr t
     
     case parseMethod (requestMethod req) of
         Right POST -> do
@@ -97,7 +96,8 @@ reportApp ServerContext{..} req respond =
           let logFiles = map (bimap decodeUtf8 fileContent) files
           let cInfo = clientInfo req
           let clientInfoFile = ("client.info", encodeUtf8 $ prettifyJson cInfo)
-
+          let pt (t :: Text) = putStr t
+          pt "use v0 app"
           res <- liftAndCatchIO $ do
               let allLogs = clientInfoFile : logFiles
 
