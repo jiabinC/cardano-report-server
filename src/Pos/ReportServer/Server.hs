@@ -139,7 +139,7 @@ reportV1App ServerContext{..} req respond =
                 
                 addEntry scLogsHolder payload logFiles
             
-            pure Nothing
+                pure Nothing
 
           case res of
               Right maybeZDResp -> do
