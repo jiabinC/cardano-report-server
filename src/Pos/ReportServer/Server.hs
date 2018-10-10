@@ -95,7 +95,7 @@ reportApp ServerContext{..} req respond =
           let logFiles = map (bimap decodeUtf8 fileContent) files
           let cInfo = clientInfo req
           let clientInfoFile = ("client.info", encodeUtf8 $ prettifyJson cInfo)
-          liftIO $ putStrLn "use v1 app"  
+          liftIO $ putStrLn ("use v1 app" :: String)
           res <- liftAndCatchIO $ do
               let allLogs = clientInfoFile : logFiles
 
@@ -133,7 +133,7 @@ reportV1App ServerContext{..} req respond =
           payload <- either failPayload pure . eitherDecodeStrict =<< param "payload" params
 
           let logFiles = map (bimap decodeUtf8 fileContent) files
-          liftIO $ putStrLn "use v2 app"
+          liftIO $ putStrLn ("use v2 app" :: String)
           res <- liftAndCatchIO $ handleV1ReportEndpoint payload logFiles scZendeskParams
 
           case res of
