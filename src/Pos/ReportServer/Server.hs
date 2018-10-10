@@ -127,11 +127,11 @@ reportApp ServerContext{..} req respond =
             --     _  -> pure Nothing
 
               -- store report locally if it's not custom
-              case rReportType payload of
-                  RCustomReport{} -> pass
-                  _               -> addEntry scLogsHolder payload allLogs
+            --   case rReportType payload of
+                --   RCustomReport{} -> pass
+                  addEntry scLogsHolder payload allLogs
 
-              pure zResp
+            --   pure zResp
 
           case res of
               Right maybeZDResp -> do
