@@ -102,36 +102,36 @@ reportApp ServerContext{..} req respond =
               let allLogs = clientInfoFile : logFiles
 
               -- Send data to zendesk if needed.
-            --   zResp <- case (scZendeskParams, rReportType payload) of
+              zResp <- case (scZendeskParams, rReportType payload) of
 
-            --     (Just zp, RCustomReport{..}) -> do
+                -- (Just zp, RCustomReport{..}) -> do
 
-            --         let cr = CustomReport crEmail crSubject crProblem
+                --     let cr = CustomReport crEmail crSubject crProblem
 
-            --         when (length logFiles > 1) $
-            --            throwIO $ BadRequest "Multiple files not allowed with custom reports."
+                --     when (length logFiles > 1) $
+                --        throwIO $ BadRequest "Multiple files not allowed with custom reports."
 
-            --         response <- createTicket cr logFiles zp
+                --     response <- createTicket cr logFiles zp
 
-            --         when (scStoreCustomReports) $
-            --             storeCustomReport scLogsHolder payload allLogs response
+                --     when (scStoreCustomReports) $
+                --         storeCustomReport scLogsHolder payload allLogs response
 
-            --         pure $ Just response
+                --     pure $ Just response
 
-            --     (Nothing, r@RCustomReport{}) -> do
-            --         let e = "Ignoring custom report because zendesk " <>
-            --                   "is turned off: " <> show r
-            --         putStrLn e
-            --         pure $ Just e
+                    (_, _) -> do
+                        let e = "Ignoring custom report because zendesk " <>
+                                "is turned off: " <> show r
+                        putStrLn e
+                        pure $ Just e
 
-            --     _  -> pure Nothing
+                    _  -> pure Nothing
 
               -- store report locally if it's not custom
-            --   case rReportType payload of
-                --   RCustomReport{} -> pass
-                  addEntry scLogsHolder payload allLogs
+              case rReportType payload of
+                  RCustomReport{} -> pass
+                  _               -> addEntry scLogsHolder payload allLogs
 
-            --   pure zResp
+              pure zResp
 
           case res of
               Right maybeZDResp -> do
