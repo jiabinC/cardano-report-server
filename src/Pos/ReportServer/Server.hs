@@ -104,17 +104,17 @@ reportApp ServerContext{..} req respond =
 
                 (Just zp, RCustomReport{..}) -> do
 
-                    let cr = CustomReport crEmail crSubject crProblem
+                    -- let cr = CustomReport crEmail crSubject crProblem
 
-                    when (length logFiles > 1) $
-                       throwIO $ BadRequest "Multiple files not allowed with custom reports."
+                    -- when (length logFiles > 1) $
+                    --    throwIO $ BadRequest "Multiple files not allowed with custom reports."
 
-                    response <- createTicket cr logFiles zp
+                    -- response <- createTicket cr logFiles zp
 
-                    when (scStoreCustomReports) $
-                        storeCustomReport scLogsHolder payload allLogs response
+                    -- when (scStoreCustomReports) $
+                    --     storeCustomReport scLogsHolder payload allLogs response
 
-                    pure $ Just response
+                    -- pure $ Just response
 
                 (Nothing, r@RCustomReport{}) -> do
                     let e = "Ignoring custom report because zendesk " <>
