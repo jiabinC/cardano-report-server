@@ -87,7 +87,7 @@ reportApp :: ServerContext -> Application
 reportApp ServerContext{..} req respond =
     case parseMethod (requestMethod req) of
         Right POST -> do
-            pt "use v0 app"
+            putStrLn "use v0 app"
           (!params, !files) <- bodyParse req
           !(payload :: ReportInfo) <-
               either failPayload pure . eitherDecodeStrict =<< param "payload" params
@@ -152,7 +152,7 @@ reportV1App :: ServerContext -> Application
 reportV1App ServerContext{..} req respond =
     case parseMethod (requestMethod req) of
         Right POST -> do
-            pt "use v1 app"
+            putStrLn "use v1 app"
           (!params, !files) <- bodyParse req
           payload <- either failPayload pure . eitherDecodeStrict =<< param "payload" params
 
