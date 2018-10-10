@@ -102,27 +102,29 @@ reportApp ServerContext{..} req respond =
               let allLogs = clientInfoFile : logFiles
 
               -- Send data to zendesk if needed.
-              zResp <- case (scZendeskParams, rReportType payload) of
 
-                -- (Just zp, RCustomReport{..}) -> do
+                zResp <- case (scZendeskParams, rReportType payload) of
 
-                --     let cr = CustomReport crEmail crSubject crProblem
-
-                --     when (length logFiles > 1) $
-                --        throwIO $ BadRequest "Multiple files not allowed with custom reports."
-
-                --     response <- createTicket cr logFiles zp
-
-                --     when (scStoreCustomReports) $
-                --         storeCustomReport scLogsHolder payload allLogs response
-
-                --     pure $ Just response
-
-                    (_, _) -> do
-                        let e = "Ignoring custom report because zendesk "
-                        putStrLn e
-                        pure $ Just e
-
+                    -- (Just zp, RCustomReport{..}) -> do
+    
+                    --     let cr = CustomReport crEmail crSubject crProblem
+    
+                    --     when (length logFiles > 1) $
+                    --        throwIO $ BadRequest "Multiple files not allowed with custom reports."
+    
+                    --     response <- createTicket cr logFiles zp
+    
+                    --     when (scStoreCustomReports) $
+                    --         storeCustomReport scLogsHolder payload allLogs response
+    
+                    --     pure $ Just response
+    
+                    -- (Nothing, r@RCustomReport{}) -> do
+                    --     let e = "Ignoring custom report because zendesk " <>
+                    --               "is turned off: " <> show r
+                    --     putStrLn e
+                    --     pure $ Just e
+    
                     _  -> pure Nothing
 
               -- store report locally if it's not custom
