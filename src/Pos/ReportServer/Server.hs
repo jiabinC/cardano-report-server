@@ -85,7 +85,8 @@ param key ps = case lookup key ps of
 
 reportApp :: ServerContext -> Application
 reportApp ServerContext{..} req respond =
-    putStrLn "use vo app"
+    let pt (t :: Text) = putStr t
+    pt "use v0 app"
     case parseMethod (requestMethod req) of
         Right POST -> do
 
