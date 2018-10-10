@@ -102,19 +102,19 @@ reportApp ServerContext{..} req respond =
               -- Send data to zendesk if needed.
               zResp <- case (scZendeskParams, rReportType payload) of
 
-                -- (Just zp, RCustomReport{..}) -> do
+                (Just zp, RCustomReport{..}) -> do
 
-                --     let cr = CustomReport crEmail crSubject crProblem
+                    let cr = CustomReport crEmail crSubject crProblem
 
-                --     when (length logFiles > 1) $
-                --        throwIO $ BadRequest "Multiple files not allowed with custom reports."
+                    when (length logFiles > 1) $
+                       throwIO $ BadRequest "Multiple files not allowed with custom reports."
 
-                --     response <- createTicket cr logFiles zp
+                    response <- createTicket cr logFiles zp
 
-                --     when (scStoreCustomReports) $
-                --         storeCustomReport scLogsHolder payload allLogs response
+                    when (scStoreCustomReports) $
+                        storeCustomReport scLogsHolder payload allLogs response
 
-                --     pure $ Just response
+                    pure $ Just response
 
                 (Nothing, r@RCustomReport{}) -> do
                     let e = "Ignoring custom report because zendesk " <>
@@ -186,22 +186,22 @@ handleV1ReportEndpoint payload logFiles scZendeskParams = do
     -- Send data to zendesk if needed.
     zResp <- case (scZendeskParams, riReportType payload) of
 
-    --   (Just zendeskParams, RCustomReport{..}) -> do
-    --       -- For the product and product
-    --       let productInfo       = riProduct payload
-    --       let productVersion    = generateProductVersion payload
-    --       let network           = riNetwork payload
+      (Just zendeskParams, RCustomReport{..}) -> do
+          -- For the product and product
+          let productInfo       = riProduct payload
+          let productVersion    = generateProductVersion payload
+          let network           = riNetwork payload
 
-    --       -- No point in this.
-    --       let cr              = CustomReport crEmail crSubject crProblem
+          -- No point in this.
+          let cr              = CustomReport crEmail crSubject crProblem
 
-    --       when (length logFiles > 1) $
-    --          throwIO $ BadRequest "Multiple files not allowed with custom reports."
+          when (length logFiles > 1) $
+             throwIO $ BadRequest "Multiple files not allowed with custom reports."
 
-    --       -- Here we create a ticket and post it to Zendesk.
-    --       response <- createPostTicket cr logFiles zendeskParams productInfo productVersion network
+          -- Here we create a ticket and post it to Zendesk.
+          response <- createPostTicket cr logFiles zendeskParams productInfo productVersion network
 
-    --       pure $ Just response
+          pure $ Just response
 
       (Nothing, r@RCustomReport{}) -> do
           let e = "Ignoring custom report because zendesk " <>
