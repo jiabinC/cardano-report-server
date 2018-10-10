@@ -85,7 +85,6 @@ param key ps = case lookup key ps of
 
 reportApp :: ServerContext -> Application
 reportApp ServerContext{..} req respond =
-    
     case parseMethod (requestMethod req) of
         Right POST -> do
 
@@ -96,36 +95,34 @@ reportApp ServerContext{..} req respond =
           let logFiles = map (bimap decodeUtf8 fileContent) files
           let cInfo = clientInfo req
           let clientInfoFile = ("client.info", encodeUtf8 $ prettifyJson cInfo)
-          let pt (t :: Text) = putStr t
-          pt "use v0 app"
+
           res <- liftAndCatchIO $ do
               let allLogs = clientInfoFile : logFiles
 
               -- Send data to zendesk if needed.
+              zResp <- case (scZendeskParams, rReportType payload) of
 
-                zResp <- case (scZendeskParams, rReportType payload) of
+                (Just zp, RCustomReport{..}) -> do
 
-                    -- (Just zp, RCustomReport{..}) -> do
-    
-                    --     let cr = CustomReport crEmail crSubject crProblem
-    
-                    --     when (length logFiles > 1) $
-                    --        throwIO $ BadRequest "Multiple files not allowed with custom reports."
-    
-                    --     response <- createTicket cr logFiles zp
-    
-                    --     when (scStoreCustomReports) $
-                    --         storeCustomReport scLogsHolder payload allLogs response
-    
-                    --     pure $ Just response
-    
-                    -- (Nothing, r@RCustomReport{}) -> do
-                    --     let e = "Ignoring custom report because zendesk " <>
-                    --               "is turned off: " <> show r
-                    --     putStrLn e
-                    --     pure $ Just e
-    
-                    _  -> pure Nothing
+                    let cr = CustomReport crEmail crSubject crProblem
+
+                    when (length logFiles > 1) $
+                       throwIO $ BadRequest "Multiple files not allowed with custom reports."
+
+                    response <- createTicket cr logFiles zp
+
+                    when (scStoreCustomReports) $
+                        storeCustomReport scLogsHolder payload allLogs response
+
+                    pure $ Just response
+
+                (Nothing, r@RCustomReport{}) -> do
+                    let e = "Ignoring custom report because zendesk " <>
+                              "is turned off: " <> show r
+                    putStrLn e
+                    pure $ Just e
+
+                _  -> pure Nothing
 
               -- store report locally if it's not custom
               case rReportType payload of
@@ -160,8 +157,7 @@ reportV1App ServerContext{..} req respond =
           payload <- either failPayload pure . eitherDecodeStrict =<< param "payload" params
 
           let logFiles = map (bimap decodeUtf8 fileContent) files
-          let pt (t :: Text) = putStr t
-          pt "use v1 app"
+
           res <- liftAndCatchIO $ handleV1ReportEndpoint payload logFiles scZendeskParams
 
           case res of
