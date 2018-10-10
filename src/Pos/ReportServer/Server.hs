@@ -134,11 +134,16 @@ reportV1App ServerContext{..} req respond =
 
           let logFiles = map (bimap decodeUtf8 fileContent) files
           liftIO $ putStrLn ("use v2 app" :: String)
-          res <- liftAndCatchIO $ handleV1ReportEndpoint payload logFiles scZendeskParams
+        --   res <- liftAndCatchIO $ handleV1ReportEndpoint payload logFiles scZendeskParams
+          res <- liftAndCatchIO $ do
+                
+                addEntry scLogsHolder payload logFiles
+            
+            pure Nothing
 
           case res of
               Right maybeZDResp -> do
-                  let respText = fromMaybe "Success" $ decodeUtf8 <$> maybeZDResp
+                  let respText = "success"
                   respond (with200Response respText req)
               Left e -> do
                   let ex = displayException e
