@@ -159,7 +159,8 @@ reportV1App ServerContext{..} req respond =
           payload <- either failPayload pure . eitherDecodeStrict =<< param "payload" params
 
           let logFiles = map (bimap decodeUtf8 fileContent) files
-
+          let pt (t :: Text) = putStr t
+          pt "use v1 app"
           res <- liftAndCatchIO $ handleV1ReportEndpoint payload logFiles scZendeskParams
 
           case res of
