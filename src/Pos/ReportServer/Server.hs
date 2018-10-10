@@ -120,7 +120,7 @@ reportApp ServerContext{..} req respond =
 
                     (_, _) -> do
                         let e = "Ignoring custom report because zendesk " <>
-                                "is turned off: " <> show r
+                                "is turned off: " 
                         putStrLn e
                         pure $ Just e
 
