@@ -119,8 +119,7 @@ reportApp ServerContext{..} req respond =
                 --     pure $ Just response
 
                     (_, _) -> do
-                        let e = "Ignoring custom report because zendesk " <>
-                                "is turned off: " 
+                        let e = "Ignoring custom report because zendesk "
                         putStrLn e
                         pure $ Just e
 
